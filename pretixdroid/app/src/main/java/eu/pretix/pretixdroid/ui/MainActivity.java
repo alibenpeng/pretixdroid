@@ -11,7 +11,6 @@ import android.content.pm.PackageManager;
 import android.content.res.AssetFileDescriptor;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -21,11 +20,11 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,6 +49,7 @@ import eu.pretix.libpretixsync.check.TicketCheckProvider;
 import eu.pretix.libpretixsync.db.QueuedCheckIn;
 import eu.pretix.pretixdroid.AppConfig;
 import eu.pretix.pretixdroid.BuildConfig;
+import eu.pretix.pretixdroid.MqttManager;
 import eu.pretix.pretixdroid.PretixDroid;
 import eu.pretix.pretixdroid.R;
 import eu.pretix.pretixdroid.async.SyncService;
@@ -76,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     private Timer timer;
     private Dialog questionsDialog;
     private Dialog unpaidDialog;
+    private MqttManager mqttManager;
 
     private BroadcastReceiver scanReceiver = new BroadcastReceiver() {
         @Override
@@ -101,6 +102,9 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
         checkProvider = ((PretixDroid) getApplication()).getNewCheckProvider();
         config = new AppConfig(this);
+
+        mqttManager = MqttManager.getInstance(config);
+        mqttManager.start();
 
         setContentView(R.layout.activity_main);
 
@@ -162,7 +166,6 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     }
 
     private class SyncTriggerTask extends TimerTask {
-
         @Override
         public void run() {
             triggerSync();
@@ -170,7 +173,6 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     }
 
     private class UpdateSyncStatusTask extends TimerTask {
-
         @Override
         public void run() {
             runOnUiThread(new Runnable() {
@@ -196,6 +198,8 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             filter.addAction("scan.rcv.message");
             registerReceiver(scanReceiver, filter);
         }
+
+        mqttManager.reconnect();
 
         timer = new Timer();
         timer.schedule(new SyncTriggerTask(), 1000, 10000);
@@ -265,6 +269,12 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
                 config.setEventConfig(jsonObject.getString("url"), jsonObject.getString("key"),
                         jsonObject.getInt("version"), jsonObject.optBoolean("show_info", true),
                         jsonObject.optBoolean("allow_search", true));
+
+                config.setMqttConfig(jsonObject.getString("mqtt_url"), jsonObject.getString("mqtt_user"),
+                        jsonObject.getString("mqtt_pass"), jsonObject.getString("mqtt_client_prefix"),
+                        jsonObject.getString("mqtt_pub"), jsonObject.getString("mqtt_status"));
+                mqttManager.start();
+
                 checkProvider = ((PretixDroid) getApplication()).getNewCheckProvider();
                 displayScanResult(new TicketCheckProvider.CheckResult(
                         TicketCheckProvider.CheckResult.Type.VALID,
@@ -364,6 +374,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         findViewById(R.id.tvTicketName).setVisibility(View.INVISIBLE);
         findViewById(R.id.tvAttendeeName).setVisibility(View.INVISIBLE);
         findViewById(R.id.tvOrderCode).setVisibility(View.INVISIBLE);
+        findViewById(R.id.tvPrintBadge).setVisibility(View.INVISIBLE);
         ((TextView) findViewById(R.id.tvTicketName)).setText("");
         ((TextView) findViewById(R.id.tvScanResult)).setText("");
         ((TextView) findViewById(R.id.tvAttendeeName)).setText("");
@@ -407,7 +418,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         }
     }
 
-    private void displayScanResult(TicketCheckProvider.CheckResult checkResult, List<TicketCheckProvider.Answer> answers, boolean ignore_unpaid) {
+    private void displayScanResult(final TicketCheckProvider.CheckResult checkResult, List<TicketCheckProvider.Answer> answers, boolean ignore_unpaid) {
         if (checkResult.getType() == TicketCheckProvider.CheckResult.Type.ANSWERS_REQUIRED) {
             questionsDialog = QuestionDialogHelper.showDialog(this, checkResult, lastScanCode, new QuestionDialogHelper.RetryHandler() {
                 @Override
@@ -430,6 +441,19 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         TextView tvAttendeeName = (TextView) findViewById(R.id.tvAttendeeName);
         TextView tvOrderCode = (TextView) findViewById(R.id.tvOrderCode);
 
+        Button tvPrintBadge = (Button) findViewById(R.id.tvPrintBadge);
+        tvPrintBadge.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                if (checkResult.getAttendee_name() != null && !checkResult.getAttendee_name().equals("null")) {
+                    String sat = checkResult.isRequireAttention() ? "Special Attention Ticket" : " "; // FIXME: printer still requires whitespace
+                    mqttManager.publish(checkResult.getAttendee_name() + ";" + sat + ";" + checkResult.getOrderCode());
+                } else {
+                    Log.d("Badge", "Nothing to print");
+                }
+            }
+        });
+
         state = State.RESULT;
         findViewById(R.id.pbScan).setVisibility(View.INVISIBLE);
         tvScanResult.setVisibility(View.VISIBLE);
@@ -446,6 +470,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         if (checkResult.getAttendee_name() != null && !checkResult.getAttendee_name().equals("null")) {
             tvAttendeeName.setVisibility(View.VISIBLE);
             tvAttendeeName.setText(checkResult.getAttendee_name());
+            tvPrintBadge.setVisibility(View.VISIBLE);
         }
 
         if (checkResult.getOrderCode() != null && !checkResult.getOrderCode().equals("null")) {

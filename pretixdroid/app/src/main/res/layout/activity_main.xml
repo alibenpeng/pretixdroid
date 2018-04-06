@@ -64,6 +64,16 @@
             android:lines="1"
             android:ellipsize="end"
             android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <Button
+            android:id="@+id/tvPrintBadge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:text="@string/action_print_badge" />
+
     </RelativeLayout>
 
     <eu.pretix.pretixdroid.ui.CustomizedScannerView

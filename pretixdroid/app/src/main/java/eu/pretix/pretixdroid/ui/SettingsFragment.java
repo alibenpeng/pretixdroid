@@ -32,12 +32,9 @@ import eu.pretix.pretixdroid.R;
 public class SettingsFragment extends PreferenceFragment {
 
     private void resetApp() {
-//        DaoSession daoSession = ((PretixDroid) getActivity().getApplication()).getDaoSession();
-//        daoSession.getQueuedCheckInDao().deleteAll();
-//        daoSession.getTicketDao().deleteAll();
-
         AppConfig config = new AppConfig(getActivity());
         config.resetEventConfig();
+        config.resetMqttConfig();
         Toast.makeText(getActivity(), R.string.reset_success, Toast.LENGTH_SHORT).show();
     }
 
