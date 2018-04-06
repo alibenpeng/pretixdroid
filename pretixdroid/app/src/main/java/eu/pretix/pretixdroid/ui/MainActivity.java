@@ -418,6 +418,15 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         }
     }
 
+    private void printBadge(final TicketCheckProvider.CheckResult checkResult) {
+        if (checkResult.getAttendee_name() != null && !checkResult.getAttendee_name().equals("null")) {
+            String sat = checkResult.isRequireAttention() ? "Special Attention Ticket" : " "; // FIXME: printer still requires whitespace
+            mqttManager.publish(checkResult.getAttendee_name() + ";" + sat + ";" + checkResult.getOrderCode());
+        } else {
+            Log.d("Badge", "Nothing to print");
+        }
+    }
+
     private void displayScanResult(final TicketCheckProvider.CheckResult checkResult, List<TicketCheckProvider.Answer> answers, boolean ignore_unpaid) {
         if (checkResult.getType() == TicketCheckProvider.CheckResult.Type.ANSWERS_REQUIRED) {
             questionsDialog = QuestionDialogHelper.showDialog(this, checkResult, lastScanCode, new QuestionDialogHelper.RetryHandler() {
@@ -445,12 +454,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         tvPrintBadge.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                if (checkResult.getAttendee_name() != null && !checkResult.getAttendee_name().equals("null")) {
-                    String sat = checkResult.isRequireAttention() ? "Special Attention Ticket" : " "; // FIXME: printer still requires whitespace
-                    mqttManager.publish(checkResult.getAttendee_name() + ";" + sat + ";" + checkResult.getOrderCode());
-                } else {
-                    Log.d("Badge", "Nothing to print");
-                }
+                printBadge(checkResult);
             }
         });
 
@@ -509,6 +513,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             case VALID:
                 col = R.color.scan_result_ok;
                 default_string = R.string.scan_result_valid;
+                printBadge(checkResult);
                 break;
         }
 

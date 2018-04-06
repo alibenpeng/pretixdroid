@@ -44,6 +44,21 @@ public class MqttManager {
             return;
         }
 
+        if(client != null && client.isConnected()) {
+            try {
+                client.disconnectForcibly();
+            } catch (MqttException me) {
+                Log.d("MQTT", "connectComplete/disconnect: " + me.getMessage());
+            }
+        }
+
+        Log.d("MQTT", "Url: " + config.getMqttUrl());
+        Log.d("MQTT", "User: " + config.getMqttUser());
+        Log.d("MQTT", "Password: " + config.getMqttPassword());
+        Log.d("MQTT", "ClientId: " + config.getMqttClientIdPrefix() + config.getMqttClientId());
+        Log.d("MQTT", "Publish: " + config.getMqttPublishPrefix());
+        Log.d("MQTT", "Status: " + config.getMqttStatusTopicPrefix());
+
         try {
             client = new MqttAsyncClient(config.getMqttUrl(), config.getMqttClientIdPrefix() + clientId, new MemoryPersistence());
 
@@ -72,6 +87,8 @@ public class MqttManager {
                         Log.d("MQTT", "connnected");
                     }
                     MqttMessage mqttMessage = new MqttMessage("{\"active\":true}".getBytes());
+                    mqttMessage.setQos(1);
+                    mqttMessage.setRetained(true);
                     try {
                         client.publish(config.getMqttStatusTopicPrefix() + clientId, mqttMessage);
                     } catch (MqttException me) {
