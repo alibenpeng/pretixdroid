@@ -100,13 +100,12 @@ fun buildUartPrinterString(name:String, sat:String, orderCode:String) : String {
     var printString = String.format("%s%s%s%s%s%s", prnInitCmd, prnSpeedCmd, prnDensityCmd, prnLabelWidthCmd, prnOriCmd, prnCharSet)
 
     for ((k, v) in args) {
-        var currentLine = ""
+        var currentLine: String
         if (k != "name") prnBold = "N" // Print only names in bold font
 
 
         if (v.length >= maxPrintLineLength) {
             Log.w("BLE PRINT", "$k length: " + v.length)
-            // FIXME: Add code to break up that line at white spaces of hyphens
             splitLongLines(v).forEach {
                 // Print parameters          1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,'data'
                 currentLine = String.format("V%d,%d,%s,%d,%d,%s,%s,%s,%s,%d,%s,%d,'%s'\r\n",

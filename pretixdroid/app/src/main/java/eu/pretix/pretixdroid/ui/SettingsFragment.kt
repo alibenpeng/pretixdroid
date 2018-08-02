@@ -1,5 +1,6 @@
 package eu.pretix.pretixdroid.ui
 
+import android.bluetooth.BluetoothGattCharacteristic
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
@@ -16,6 +17,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import buildUartPrinterString
 
 import com.joshdholtz.sentry.Sentry
 
@@ -29,6 +31,7 @@ import eu.pretix.libpretixsync.db.QueuedCheckIn
 import eu.pretix.pretixdroid.AppConfig
 import eu.pretix.pretixdroid.PretixDroid
 import eu.pretix.pretixdroid.R
+import eu.pretix.pretixdroid.ui.MainActivity.Companion.mBluetoothLeService
 
 class SettingsFragment : PreferenceFragment() {
 
@@ -104,6 +107,9 @@ class SettingsFragment : PreferenceFragment() {
 
         val print_test_badge = findPreference("action_print_test_badge")
             print_test_badge.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                mBluetoothLeService!!.writeUartData(
+                        mBluetoothLeService!!.uartTxCharacteristic as BluetoothGattCharacteristic,
+                        buildUartPrinterString("Klaus-Bärbel Günther von Irgendwas-Doppelname genannt Jemand Anders", "SPECIÄL ÄTTÜNTIÖN", "Örder Cöde"))
                 return@OnPreferenceClickListener true
 
         }
