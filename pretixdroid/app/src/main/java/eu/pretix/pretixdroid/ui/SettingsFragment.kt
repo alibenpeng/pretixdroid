@@ -1,6 +1,7 @@
 package eu.pretix.pretixdroid.ui
 
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import android.preference.CheckBoxPreference
 import android.preference.Preference
@@ -101,16 +102,10 @@ class SettingsFragment : PreferenceFragment() {
             true
         }
 
-        val ble_printing_enabled = findPreference("ble_printing") as CheckBoxPreference
-        ble_printing_enabled.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { preference, newValue ->
-            val config = AppConfig(activity)
-            if (newValue is Boolean && newValue != config.asyncModeEnabled) {
-                if (newValue) {
-                    config.blePrintingEnabled = true
-                    ble_printing_enabled.isChecked = true
-                }
-            }
-            true
+        val print_test_badge = findPreference("action_print_test_badge")
+            print_test_badge.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                return@OnPreferenceClickListener true
+
         }
     }
 

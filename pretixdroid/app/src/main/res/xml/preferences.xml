@@ -37,12 +37,13 @@
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="print_immediately"
-            android:dependency="ble_printing"
             android:title="@string/pref_printer_print_immediately" />
         <Preference
             android:dependency="ble_printing"
             android:key="action_blescan"
-            android:title="@string/action_blescan" />
+            android:title="@string/action_blescan" >
+            <intent android:action="eu.pretix.pretixdroid.ui.BleScanActivity" />
+        </Preference>
         <Preference
             android:dependency="ble_printing"
             android:key="action_print_test_badge"

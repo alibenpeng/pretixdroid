@@ -64,6 +64,10 @@
             android:name=".ui.BleScanActivity"
             android:label="@string/action_blescan"
             android:parentActivityName=".ui.MainActivity">
+            <intent-filter>
+                <action android:name="eu.pretix.pretixdroid.ui.BleScanActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="eu.pretix.pretixdroid.ui.MainActivity" />
