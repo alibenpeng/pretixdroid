@@ -43,6 +43,7 @@
     <string name="pref_head_scan">Scanning</string>
     <string name="pref_head_connection">Connection</string>
     <string name="pref_head_other">Other</string>
+    <string name="pref_head_printer">Printer</string>
     <string name="reset_success">You can now scan a new configuration code</string>
     <string name="action_preferences">Settings</string>
     <string name="pref_camera">Use device camera</string>
@@ -82,9 +83,12 @@
     <string name="dialog_unpaid_text">This ticket belongs to an order that has not yet been paid. Do you still want to check it in? This will not mark the order as paid.</string>
     <string name="dialog_unpaid_retry">Check in anyways</string>
     <string name="action_print_badge">Print Badge</string>
-    <string name="action_blescan">BLE Scan</string>
+    <string name="action_blescan">Scan BLE Printers</string>
     <string name="ble_scan">Scan</string>
     <string name="menu_disconnect">Disconnect BLE Device</string>
     <string name="menu_connect">Connect BLE Device</string>
     <string name="menu_print_test_ticket">Print Test Ticket</string>
+    <string name="pref_printer_enable">Enable BLE Printing</string>
+    <string name="pref_printer_print_immediately">Print badge immediately</string>
+    <string name="print_test_badge">Print test badge</string>
 </resources>

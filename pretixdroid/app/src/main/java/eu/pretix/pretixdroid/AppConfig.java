@@ -33,6 +33,8 @@ public class AppConfig implements ConfigStore {
     private static final String PREFS_KEY_MQTT_STATUS_TOPIC = "mqtt_status_topic";
     private static final String PREFS_KEY_MQTT_CLIENT_ID = "mqtt_client_id";
 
+    private static final String PREFS_KEY_BLE_PRINTING = "ble_printing";
+
     private SharedPreferences prefs;
     private SharedPreferences default_prefs;
 
@@ -236,5 +238,13 @@ public class AppConfig implements ConfigStore {
 
     public void setMqttClientId(String val) {
         prefs.edit().putString(PREFS_KEY_MQTT_CLIENT_ID, val).apply();
+    }
+
+    public boolean getBlePrintingEnabled() {
+        return prefs.getBoolean(PREFS_KEY_BLE_PRINTING, false);
+    }
+
+    public void setBlePrintingEnabled(Boolean val) {
+        prefs.edit().putBoolean(PREFS_KEY_BLE_PRINTING, val).apply();
     }
 }

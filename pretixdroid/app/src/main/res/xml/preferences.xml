@@ -29,6 +29,25 @@
             android:key="autofocus"
             android:title="@string/action_autofocus" />
     </PreferenceCategory>
+    <PreferenceCategory android:title="@string/pref_head_printer">
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="ble_printing"
+            android:title="@string/pref_printer_enable" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="print_immediately"
+            android:dependency="ble_printing"
+            android:title="@string/pref_printer_print_immediately" />
+        <Preference
+            android:dependency="ble_printing"
+            android:key="action_blescan"
+            android:title="@string/action_blescan" />
+        <Preference
+            android:dependency="ble_printing"
+            android:key="action_print_test_badge"
+            android:title="@string/print_test_badge" />
+    </PreferenceCategory>
     <PreferenceCategory android:title="@string/pref_head_other">
         <Preference
             android:key="action_about"
