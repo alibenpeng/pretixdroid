@@ -53,7 +53,8 @@
     <string name="pref_async_hint_off">Scanned tickets are checked directly with the server. The app requires an internet connection to work.</string>
     <string name="pref_async_not_supported">Asynchronous scanning is not supported by the version of pretix running on your server. Please check for updates of pretix.</string>
     <string name="pref_async_warning">If you turn on asynchronous scanning, your phone will not be always up to date about the current database state. For example, if you use more than one device for scanning, a ticket might be shown as valid twice if it has already been scanned by a different device before.</string>
-    <string name="pref_reset_warning">Your app is not fully synchronized. If you reset it now, some scans made on this device might get permanently lost.</string>
+    <string name="pref_reset_warning">Really reset the app?</string>
+    <string name="pref_reset_sync_warning">Your app is not fully synchronized. If you reset it now, some scans made on this device might get permanently lost.</string>
     <plurals name="time_minutes">
         <item quantity="one">%d minute</item>
         <item quantity="other">%d minutes</item>

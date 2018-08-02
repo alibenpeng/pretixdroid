@@ -32,10 +32,23 @@ import eu.pretix.pretixdroid.R;
 public class SettingsFragment extends PreferenceFragment {
 
     private void resetApp() {
-        AppConfig config = new AppConfig(getActivity());
-        config.resetEventConfig();
-        config.resetMqttConfig();
-        Toast.makeText(getActivity(), R.string.reset_success, Toast.LENGTH_SHORT).show();
+        new AlertDialog.Builder(getActivity())
+                .setMessage(R.string.pref_reset_warning)
+                .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        // do nothing
+                    }
+                })
+                .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        AppConfig config = new AppConfig(getActivity());
+                        config.resetEventConfig();
+                        config.resetMqttConfig();
+                        Toast.makeText(getActivity(), R.string.reset_success, Toast.LENGTH_SHORT).show();
+                    }
+                }).create().show();
     }
 
     @Override
@@ -52,7 +65,7 @@ public class SettingsFragment extends PreferenceFragment {
                 long cnt = ((PretixDroid) getActivity().getApplication()).getData().count(QueuedCheckIn.class).get().value();
                 if (cnt > 0) {
                     new AlertDialog.Builder(getActivity())
-                            .setMessage(R.string.pref_reset_warning)
+                            .setMessage(R.string.pref_reset_sync_warning)
                             .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int whichButton) {

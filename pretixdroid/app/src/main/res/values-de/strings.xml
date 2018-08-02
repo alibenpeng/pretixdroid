@@ -51,7 +51,8 @@
     <string name="pref_async_hint_off">Gescannte Tickets werden direkt mit dem Server abgeglichen. Die App benötigt eine Internetverbindung.</string>
     <string name="pref_async_not_supported">Asynchrones Scannen wird von Ihrem pretix-Server nicht unterstützt. Bitte prüfen Sie pretix auf Updates.</string>
     <string name="pref_async_warning">Wenn Sie asynchrones Scannen anschalten, wird dieses Gerät nicht immer den aktuellesten Stand der Datenbank kennen. Das kann, beispielsweise wenn Sie mehrere Geräte einsetzen, dazu führen, dass das selbe Ticket auf zwei verschiedenen Geräten zweimal als gültig angezeigt wird, wenn in kurzer Folge mehrfach gescannt wird.</string>
-    <string name="pref_reset_warning">Die App ist nicht voll synchronisiert. Wenn Sie sie nun zurücksetzen, könnten einige auf diesem Gerät geschehene Checkins dauerhaft verloren gehen.</string>
+    <string name="pref_reset_warning">Konfiguration zurücksetzen?</string>
+    <string name="pref_reset_sync_warning">Die App ist nicht voll synchronisiert. Wenn Sie sie nun zurücksetzen, könnten einige auf diesem Gerät geschehene Checkins dauerhaft verloren gehen.</string>
     <plurals name="time_minutes">
         <item quantity="one">%d Minute</item>
         <item quantity="other">%d Minuten</item>
