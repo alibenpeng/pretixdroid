@@ -44,7 +44,7 @@
     <string name="pref_camera_hint">Deaktivieren Sie diese Option, wenn Ihr Gerät einen eingebauten Barcode-Scanner hat. Dies funktioniert derzeit nur bei wenigen Geräten.</string>
     <string name="pref_head_connection">Verbindung</string>
     <string name="pref_head_other">Sonstiges</string>
-    <string name="pref_head_printer">Drucker</string>
+    <string name="pref_head_printing">Drucken</string>
     <string name="pref_head_scan">Scannen</string>
     <string name="reset_success">Sie können nun einen neuen Konfigurations-Code scannen</string>
     <string name="pref_async">Asynchrones Scannen (beta)</string>
@@ -89,4 +89,6 @@
     <string name="pref_printer_enable">BLE-Druck benutzen</string>
     <string name="pref_printer_print_immediately">Badge sofort drucken</string>
     <string name="print_test_badge">Test-Badge drucken</string>
+    <string name="scan_timeout">Suche beendet</string>
+    <string name="no_devices_found">Keine BLE-Drucker gefunden</string>
 </resources>

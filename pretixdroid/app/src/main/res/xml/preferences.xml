@@ -29,7 +29,7 @@
             android:key="autofocus"
             android:title="@string/action_autofocus" />
     </PreferenceCategory>
-    <PreferenceCategory android:title="@string/pref_head_printer">
+    <PreferenceCategory android:title="@string/pref_head_printing">
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="ble_printing"

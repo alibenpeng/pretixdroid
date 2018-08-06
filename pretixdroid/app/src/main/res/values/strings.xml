@@ -43,7 +43,7 @@
     <string name="pref_head_scan">Scanning</string>
     <string name="pref_head_connection">Connection</string>
     <string name="pref_head_other">Other</string>
-    <string name="pref_head_printer">Printer</string>
+    <string name="pref_head_printing">Printing</string>
     <string name="reset_success">You can now scan a new configuration code</string>
     <string name="action_preferences">Settings</string>
     <string name="pref_camera">Use device camera</string>
@@ -91,4 +91,6 @@
     <string name="pref_printer_enable">Enable BLE Printing</string>
     <string name="pref_printer_print_immediately">Print badge immediately</string>
     <string name="print_test_badge">Print test badge</string>
+    <string name="scan_timeout">Scan Timeout</string>
+    <string name="no_devices_found">No devices found</string>
 </resources>

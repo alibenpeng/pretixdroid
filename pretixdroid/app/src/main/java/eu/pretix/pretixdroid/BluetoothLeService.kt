@@ -11,6 +11,7 @@ import android.bluetooth.BluetoothManager
 import android.bluetooth.BluetoothProfile
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Binder
 import android.os.IBinder
 import android.os.ParcelUuid
@@ -196,8 +197,15 @@ class BluetoothLeService : Service() {
      * callback.
      */
     fun connect(address: String?): Boolean {
-        if (mBluetoothAdapter == null || address == null) {
-            Log.w(TAG, "BluetoothAdapter not initialized or unspecified address.")
+        val config = AppConfig(this)
+
+        if (mBluetoothAdapter == null) {
+            Log.e(TAG, "BluetoothAdapter not initialized.")
+            return false
+        }
+
+        if (address == null) {
+            Log.e(TAG, "Unspecified address.")
             return false
         }
 
@@ -206,6 +214,7 @@ class BluetoothLeService : Service() {
                 && mBluetoothGatt != null) {
             Log.d(TAG, "Trying to use an existing mBluetoothGatt for connection.")
             if (mBluetoothGatt!!.connect()) {
+                config.blePrinterAddress = address
                 mConnectionState = STATE_CONNECTING
                 return true
             } else {
@@ -223,6 +232,7 @@ class BluetoothLeService : Service() {
         mBluetoothGatt = device.connectGatt(this, false, mGattCallback)
         Log.d(TAG, "Trying to create a new connection.")
         mBluetoothDeviceAddress = address
+        config.blePrinterAddress = address
         mConnectionState = STATE_CONNECTING
         return true
     }

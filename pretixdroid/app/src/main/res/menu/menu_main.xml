@@ -24,14 +24,14 @@
 <!--    <item
         android:id="@+id/action_blescan"
         android:title="@string/action_blescan" />-->
-    <item android:id="@+id/menu_connect"
+<!--    <item android:id="@+id/menu_connect"
         android:title="@string/menu_connect"
         android:orderInCategory="100"
         app:showAsAction="ifRoom|withText"/>
     <item android:id="@+id/menu_disconnect"
         android:title="@string/menu_disconnect"
         android:orderInCategory="101"
-        app:showAsAction="ifRoom|withText"/>
+        app:showAsAction="ifRoom|withText"/>-->
 <!--    <item android:id="@+id/menu_print_test_ticket"
         android:title="@string/menu_print_test_ticket"
         android:orderInCategory="101"

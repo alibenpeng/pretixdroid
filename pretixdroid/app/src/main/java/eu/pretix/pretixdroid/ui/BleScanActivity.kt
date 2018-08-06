@@ -33,6 +33,8 @@ class BleScanActivity : AppCompatActivity() {
 
     lateinit internal var btnScan: Button
     lateinit internal var listViewLE: ListView
+    lateinit internal var scanSpinner: ProgressBar
+    lateinit internal var scanError: TextView
 
     lateinit internal var adapterLeScanResult: ListAdapter
     private lateinit var displayListBluetoothDevice : ArrayList<Map<String, String>>
@@ -62,6 +64,8 @@ class BleScanActivity : AppCompatActivity() {
                         mBluetoothLeScanner!!.stopScan(scanCallback)
                         mScanning = false
                         btnScan.isEnabled = true
+//                        btnScan.visibility = View.VISIBLE
+                        scanSpinner.visibility = View.GONE
                     }
                     startActivity(intent)
                 }
@@ -140,6 +144,10 @@ class BleScanActivity : AppCompatActivity() {
         btnScan = findViewById<View>(R.id.scan) as Button
         btnScan.setOnClickListener { scanLeDevice(true) }
         listViewLE = findViewById<View>(R.id.lelist) as ListView
+        scanSpinner = findViewById(R.id.leScanProgress)
+        scanSpinner.isIndeterminate = true
+        scanError = findViewById(R.id.leScanError)
+
 
         displayListBluetoothDevice = ArrayList()
         adapterLeScanResult = SimpleAdapter(
@@ -204,20 +212,33 @@ class BleScanActivity : AppCompatActivity() {
      */
     private fun scanLeDevice(enable: Boolean) {
         if (enable) {
+            listViewLE.visibility = View.VISIBLE
+            scanError.visibility = View.GONE
             displayListBluetoothDevice.clear()
+//            btnScan.visibility = View.GONE
+            scanSpinner.visibility = View.VISIBLE
             listViewLE.invalidateViews()
 
             // Stops scanning after a pre-defined scan period.
             mHandler!!.postDelayed({
+                if (displayListBluetoothDevice.isEmpty()){
+                    listViewLE.visibility = View.GONE
+                    scanError.visibility = View.VISIBLE
+                }
                 mBluetoothLeScanner!!.stopScan(scanCallback)
                 listViewLE.invalidateViews()
+/*
 
                 Toast.makeText(this@BleScanActivity,
                         "Scan timeout",
                         Toast.LENGTH_LONG).show()
+*/
 
                 mScanning = false
+//                btnScan.visibility = View.VISIBLE
                 btnScan.isEnabled = true
+//                listViewLE.visibility = View.VISIBLE
+                scanSpinner.visibility = View.GONE
             }, SCAN_PERIOD)
 
             //scan specified devices only with ScanFilter
@@ -233,11 +254,16 @@ class BleScanActivity : AppCompatActivity() {
 
 
             mScanning = true
+//            btnScan.visibility = View.GONE
             btnScan.isEnabled = false
+            scanSpinner.visibility = View.VISIBLE
         } else {
             mBluetoothLeScanner!!.stopScan(scanCallback)
             mScanning = false
             btnScan.isEnabled = true
+//            btnScan.visibility = View.VISIBLE
+//            listViewLE.visibility = View.VISIBLE
+            scanSpinner.visibility = View.GONE
         }
     }
 

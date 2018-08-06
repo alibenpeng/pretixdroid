@@ -34,6 +34,8 @@ public class AppConfig implements ConfigStore {
     private static final String PREFS_KEY_MQTT_CLIENT_ID = "mqtt_client_id";
 
     private static final String PREFS_KEY_BLE_PRINTING = "ble_printing";
+    private static final String PREFS_KEY_BLE_ADDRESS = "ble_address";
+    private static final String PREFS_KEY_BLE_CONNECTED = "ble_connected";
 
     private SharedPreferences prefs;
     private SharedPreferences default_prefs;
@@ -246,5 +248,21 @@ public class AppConfig implements ConfigStore {
 
     public void setBlePrintingEnabled(Boolean val) {
         prefs.edit().putBoolean(PREFS_KEY_BLE_PRINTING, val).apply();
+    }
+
+    public Boolean getBleConnected() {
+        return prefs.getBoolean(PREFS_KEY_BLE_CONNECTED, false);
+    }
+
+    public void setBleConnected(Boolean val) {
+        prefs.edit().putBoolean(PREFS_KEY_BLE_CONNECTED, val).apply();
+    }
+
+    public String getBlePrinterAddress() {
+        return prefs.getString(PREFS_KEY_BLE_ADDRESS, "");
+    }
+
+    public void setBlePrinterAddress(String val) {
+        prefs.edit().putString(PREFS_KEY_BLE_ADDRESS, val).apply();
     }
 }

@@ -13,8 +13,23 @@
         android:layout_height="wrap_content"
         android:text="@string/ble_scan" />
 
+    <ProgressBar
+        android:id="@+id/leScanProgress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/leScanError"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/no_devices_found"/>
+
     <ListView
         android:id="@+id/lelist"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent">
+
+    </ListView>
 </LinearLayout>
