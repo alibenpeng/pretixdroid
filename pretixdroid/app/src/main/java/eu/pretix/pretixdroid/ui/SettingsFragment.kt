@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.preference.CheckBoxPreference
 import android.preference.Preference
 import android.preference.PreferenceFragment
-import android.preference.SwitchPreference
 import android.support.annotation.RawRes
 import android.support.annotation.StringRes
 import android.support.v7.app.AlertDialog
@@ -31,6 +30,7 @@ import eu.pretix.libpretixsync.db.QueuedCheckIn
 import eu.pretix.pretixdroid.AppConfig
 import eu.pretix.pretixdroid.PretixDroid
 import eu.pretix.pretixdroid.R
+import eu.pretix.pretixdroid.ui.MainActivity.Companion.checkProvider
 import eu.pretix.pretixdroid.ui.MainActivity.Companion.mBluetoothLeService
 
 class SettingsFragment : PreferenceFragment() {
@@ -106,12 +106,15 @@ class SettingsFragment : PreferenceFragment() {
         }
 
         val print_test_badge = findPreference("action_print_test_badge")
+        if (checkProvider != null && mBluetoothLeService != null) {
+            val testData = checkProvider!!.testTicket
             print_test_badge.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 mBluetoothLeService!!.writeUartData(
                         mBluetoothLeService!!.uartTxCharacteristic as BluetoothGattCharacteristic,
-                        buildUartPrinterString("Klaus-Bärbel Günther von Irgendwas-Doppelname genannt Jemand Anders", "SPECIÄL ÄTTÜNTIÖN", "Örder Cöde"))
+                        buildUartPrinterString(testData[0], "SPECIÄL ÄTTÜNTIÖN", testData[1]))
+//                buildUartPrinterString("Klaus-Bärbel Günther von Irgendwas-Doppelname genannt Jemand Anders", "SPECIÄL ÄTTÜNTIÖN", "Örder Cöde"))
                 return@OnPreferenceClickListener true
-
+            }
         }
     }
 

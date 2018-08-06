@@ -5,7 +5,6 @@ import android.app.Dialog
 import android.bluetooth.BluetoothGattCharacteristic
 import android.content.*
 import android.content.pm.PackageManager
-import android.content.res.AssetFileDescriptor
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.os.AsyncTask
@@ -19,7 +18,6 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.Button
@@ -48,13 +46,11 @@ import eu.pretix.libpretixsync.db.QueuedCheckIn
 import eu.pretix.pretixdroid.AppConfig
 import eu.pretix.pretixdroid.BluetoothLeService
 import eu.pretix.pretixdroid.BuildConfig
-import eu.pretix.pretixdroid.MqttManager
+//import eu.pretix.pretixdroid.MqttManager
 import eu.pretix.pretixdroid.PretixDroid
 import eu.pretix.pretixdroid.R
 import eu.pretix.pretixdroid.async.SyncService
 import me.dm7.barcodescanner.zxing.ZXingScannerView
-import java.nio.charset.Charset
-import kotlin.text.Charsets.ISO_8859_1
 
 class MainActivity : AppCompatActivity(), ZXingScannerView.ResultHandler, MediaPlayer.OnCompletionListener {
     private var qrView: CustomizedScannerView? = null
@@ -66,12 +62,11 @@ class MainActivity : AppCompatActivity(), ZXingScannerView.ResultHandler, MediaP
     private var blinkDark = true
     private var blinkHandler: Handler? = null
     private var mediaPlayer: MediaPlayer? = null
-    private var checkProvider: TicketCheckProvider? = null
     private var config: AppConfig? = null
     private var timer: Timer? = null
     private var questionsDialog: Dialog? = null
     private var unpaidDialog: Dialog? = null
-    private var mqttManager: MqttManager? = null
+//    private var mqttManager: MqttManager? = null
 
     private val TAG = MainActivity::class.java.simpleName
     private var mDeviceName: String? = null
@@ -170,8 +165,8 @@ class MainActivity : AppCompatActivity(), ZXingScannerView.ResultHandler, MediaP
         checkProvider = (application as PretixDroid).newCheckProvider
         config = AppConfig(this)
 
-        mqttManager = MqttManager.getInstance(config)
-        mqttManager!!.start()
+//        mqttManager = MqttManager.getInstance(config)
+//        mqttManager!!.start()
 
 
         val intent = intent
@@ -261,7 +256,7 @@ class MainActivity : AppCompatActivity(), ZXingScannerView.ResultHandler, MediaP
             registerReceiver(scanReceiver, filter)
         }
 
-        mqttManager!!.reconnect()
+//        mqttManager!!.reconnect()
 
         registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter())
         if (mBluetoothLeService != null) {
@@ -349,7 +344,7 @@ class MainActivity : AppCompatActivity(), ZXingScannerView.ResultHandler, MediaP
                 config!!.setMqttConfig(jsonObject.getString("mqtt_url"), jsonObject.getString("mqtt_user"),
                         jsonObject.getString("mqtt_pass"), jsonObject.getString("mqtt_client_prefix"),
                         jsonObject.getString("mqtt_pub"), jsonObject.getString("mqtt_status"))
-                mqttManager!!.start()
+//                mqttManager!!.start()
 
                 checkProvider = (application as PretixDroid).newCheckProvider
                 displayScanResult(TicketCheckProvider.CheckResult(
@@ -500,19 +495,12 @@ class MainActivity : AppCompatActivity(), ZXingScannerView.ResultHandler, MediaP
                         mBluetoothLeService!!.uartTxCharacteristic as BluetoothGattCharacteristic,
                         buildUartPrinterString(checkResult.attendee_name, sat, checkResult.orderCode))
             } else {
-                mqttManager?.publish(checkResult.getAttendee_name() + ";" + sat + ";" + checkResult.getOrderCode());
+//                mqttManager?.publish(checkResult.getAttendee_name() + ";" + sat + ";" + checkResult.getOrderCode());
             }
         } else {
             Log.d("Badge", "Nothing to print")
         }
     }
-
-    fun printTestBadge() {
-        mBluetoothLeService!!.writeUartData(
-                mBluetoothLeService!!.uartTxCharacteristic as BluetoothGattCharacteristic,
-                buildUartPrinterString("Klaus-Bärbel Günther von Irgendwas-Doppelname genannt Jemand Anders", "SPECIÄL ÄTTÜNTIÖN", "Örder Cöde"))
-    }
-
 
     private fun displayScanResult(checkResult: TicketCheckProvider.CheckResult, answers: List<TicketCheckProvider.Answer>?, ignore_unpaid: Boolean) {
         if (checkResult.type == TicketCheckProvider.CheckResult.Type.ANSWERS_REQUIRED) {
@@ -732,6 +720,7 @@ class MainActivity : AppCompatActivity(), ZXingScannerView.ResultHandler, MediaP
     companion object {
 
         var mBluetoothLeService: BluetoothLeService? = null
+        var checkProvider: TicketCheckProvider? = null
 
         val PERMISSIONS_REQUEST_CAMERA = 10001
         val EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS"
