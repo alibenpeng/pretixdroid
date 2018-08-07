@@ -91,4 +91,7 @@
     <string name="print_test_badge">Test-Badge drucken</string>
     <string name="scan_timeout">Suche beendet</string>
     <string name="no_devices_found">Keine BLE-Drucker gefunden</string>
+    <string name="printing_disabled">Druck ist deaktiviert</string>
+    <string name="printer_disconnected">Drucker nicht verbunden</string>
+    <string name="printer_connection_error">Drucker Verbindungsfehler</string>
 </resources>

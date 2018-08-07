@@ -105,6 +105,35 @@ class SettingsFragment : PreferenceFragment() {
             true
         }
 
+        val ble_printing = findPreference("ble_printing") as CheckBoxPreference
+        ble_printing.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { preference, newValue ->
+            val config = AppConfig(activity)
+            if (newValue is Boolean && newValue != config.blePrintingEnabled) {
+                if (mBluetoothLeService != null) {
+                    if (newValue) {
+                        mBluetoothLeService!!.connect(config.blePrinterAddress)
+                        config.blePrintingEnabled = true
+                        ble_printing.isChecked = true
+                    } else {
+                        mBluetoothLeService!!.disconnect()
+                        config.blePrintingEnabled = false
+                        ble_printing.isChecked = false
+                    }
+                }
+            }
+            true
+        }
+
+        val ble_scan = findPreference("action_blescan") as Preference
+        ble_scan.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            val config = AppConfig(activity)
+            config.blePrinterAddress = ""
+            mBluetoothLeService!!.disconnect()
+            val intent_blescan = Intent("eu.pretix.pretixdroid.ui.BleScanActivity")
+            startActivity(intent_blescan)
+            return@OnPreferenceClickListener true
+        }
+
         val print_test_badge = findPreference("action_print_test_badge")
         if (checkProvider != null && mBluetoothLeService != null) {
             val testData = checkProvider!!.testTicket

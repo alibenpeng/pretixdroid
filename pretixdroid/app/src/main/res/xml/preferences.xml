@@ -37,9 +37,7 @@
         <Preference
             android:dependency="ble_printing"
             android:key="action_blescan"
-            android:title="@string/action_blescan" >
-            <intent android:action="eu.pretix.pretixdroid.ui.BleScanActivity" />
-        </Preference>
+            android:title="@string/action_blescan" />
         <Preference
             android:dependency="ble_printing"
             android:key="action_print_test_badge"
