@@ -518,7 +518,7 @@ class MainActivity : AppCompatActivity(), ZXingScannerView.ResultHandler, MediaP
 
     private fun printBadge(checkResult: TicketCheckProvider.CheckResult) {
         if (checkResult.attendee_name != null && checkResult.attendee_name != "null") {
-            val sat = if (checkResult.isRequireAttention) "Special Attention Ticket" else " " // FIXME: printer still requires whitespace
+//            val sat = if (checkResult.isRequireAttention) "Special Attention Ticket" else " " // FIXME: printer still requires whitespace
 
             if (!config!!.blePrintingEnabled) {
                 Log.d(TAG, "BLE Printing disabled")
@@ -539,7 +539,7 @@ class MainActivity : AppCompatActivity(), ZXingScannerView.ResultHandler, MediaP
                 // All clear, print away!
                 mBluetoothLeService!!.writeUartData(
                         mBluetoothLeService!!.uartTxCharacteristic as BluetoothGattCharacteristic,
-                        buildUartPrinterString(checkResult.attendee_name, sat, checkResult.orderCode))
+                        buildUartPrinterString(checkResult.attendee_name, checkResult.isRequireAttention, checkResult.orderCode))
 //                mqttManager?.publish(checkResult.getAttendee_name() + ";" + sat + ";" + checkResult.getOrderCode());
             }
         } else {

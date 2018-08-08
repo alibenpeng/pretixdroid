@@ -140,8 +140,9 @@ class SettingsFragment : PreferenceFragment() {
             print_test_badge.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 mBluetoothLeService!!.writeUartData(
                         mBluetoothLeService!!.uartTxCharacteristic as BluetoothGattCharacteristic,
-                        buildUartPrinterString(testData[0], "SPECIÄL ÄTTÜNTIÖN", testData[1]))
-//                buildUartPrinterString("Klaus-Bärbel Günther von Irgendwas-Doppelname genannt Jemand Anders", "SPECIÄL ÄTTÜNTIÖN", "Örder Cöde"))
+//                        buildUartPrinterString(testData[0], false, testData[1]))
+//                buildUartPrinterString("Klaus-Bärbel Günther von Irgendwas-Doppelname genannt Jemand Anders", false, "1234567890"))
+                buildUartPrinterString("Häns Würst", false, "1234567890"))
                 return@OnPreferenceClickListener true
             }
         }
