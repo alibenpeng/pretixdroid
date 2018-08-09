@@ -96,4 +96,6 @@
     <string name="printing_disabled">Printing disabled by configuration</string>
     <string name="printer_disconnected">Printer disconnected</string>
     <string name="printer_connection_error">Printer connection error</string>
+    <string name="menu_connected">BLE Connected</string>
+    <string name="menu_disconnected">BLE Disconnected</string>
 </resources>

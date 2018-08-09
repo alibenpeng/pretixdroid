@@ -104,14 +104,14 @@ class MainActivity : AppCompatActivity(), ZXingScannerView.ResultHandler, MediaP
             when (action) {
                 BluetoothLeService.ACTION_GATT_CONNECTED -> {
                     Log.i(TAG, "ACTION_GATT_CONNECTED")
-                    invalidateOptionsMenu()
                     config!!.bleConnected = true
+                    invalidateOptionsMenu()
                 }
 
                 BluetoothLeService.ACTION_GATT_DISCONNECTED -> {
                     Log.i(TAG, "ACTION_GATT_DISCONNECTED")
-                    invalidateOptionsMenu()
                     config!!.bleConnected = false
+                    invalidateOptionsMenu()
 
                     connectGatt()
                 }
@@ -162,9 +162,11 @@ class MainActivity : AppCompatActivity(), ZXingScannerView.ResultHandler, MediaP
                             "Connect attempt failed!",
                             Toast.LENGTH_LONG).show()
                 }
+            } else {
+                Log.d(TAG, "GATT Connect request: \"${mDeviceAddress}\" is not a valid Bluetooth Address!")
             }
         } else {
-            Log.d(TAG, "GATT Connect request: \"${mDeviceAddress}\" is not a valid Bluetooth Address!")
+            Log.d(TAG, "GATT Connect request: BLE Printing disabled by config!")
         }
     }
 
@@ -691,18 +693,14 @@ class MainActivity : AppCompatActivity(), ZXingScannerView.ResultHandler, MediaP
         val checkable = menu.findItem(R.id.action_flashlight)
         checkable.isChecked = config!!.flashlight
 /*
-
         if (config!!.bleConnected) {
-            menu.findItem(R.id.menu_connect).isVisible = false
-            menu.findItem(R.id.menu_disconnect).isVisible = true
-//            menu.findItem(R.id.menu_print_test_ticket).isVisible = true
+            menu.findItem(R.id.menu_connected).isVisible = true
+            menu.findItem(R.id.menu_disconnected).isVisible = false
         } else {
-            menu.findItem(R.id.menu_connect).isVisible = true
-            menu.findItem(R.id.menu_disconnect).isVisible = false
-//            menu.findItem(R.id.menu_print_test_ticket).isVisible = false
+            menu.findItem(R.id.menu_connected).isVisible = false
+            menu.findItem(R.id.menu_disconnected).isVisible = true
         }
 */
-
         return true
     }
 

@@ -94,4 +94,6 @@
     <string name="printing_disabled">Druck ist deaktiviert</string>
     <string name="printer_disconnected">Drucker nicht verbunden</string>
     <string name="printer_connection_error">Drucker Verbindungsfehler</string>
+    <string name="menu_connected">BLE verbunden</string>
+    <string name="menu_disconnected">BLE getrennt</string>
 </resources>

@@ -1,7 +1,7 @@
 package eu.pretix.pretixdroid.ui
 
 import android.bluetooth.BluetoothGattCharacteristic
-import android.content.DialogInterface
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.preference.CheckBoxPreference
@@ -12,6 +12,7 @@ import android.support.annotation.StringRes
 import android.support.v7.app.AlertDialog
 import android.text.Html
 import android.text.method.LinkMovementMethod
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
@@ -35,6 +36,7 @@ import eu.pretix.pretixdroid.ui.MainActivity.Companion.mBluetoothLeService
 
 class SettingsFragment : PreferenceFragment() {
 
+    private val TAG = SettingsFragment::class.java.simpleName
     private fun resetApp() {
         AlertDialog.Builder(activity)
                 .setMessage(R.string.pref_reset_warning)
@@ -136,14 +138,36 @@ class SettingsFragment : PreferenceFragment() {
 
         val print_test_badge = findPreference("action_print_test_badge")
         if (checkProvider != null && mBluetoothLeService != null) {
+            val config = AppConfig(activity)
             val testData = checkProvider!!.testTicket
             print_test_badge.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                mBluetoothLeService!!.writeUartData(
-                        mBluetoothLeService!!.uartTxCharacteristic as BluetoothGattCharacteristic,
-//                        buildUartPrinterString(testData[0], false, testData[1]))
+                if (!config!!.blePrintingEnabled) {
+                    Log.d(TAG, "BLE Printing disabled")
+                    Toast.makeText(activity,
+                            R.string.printing_disabled,
+                            Toast.LENGTH_LONG).show()
+                    return@OnPreferenceClickListener false
+                } else if (!config!!.bleConnected || mBluetoothLeService == null) {
+                    Log.d(TAG, "Printer disconnected")
+                    Toast.makeText(activity,
+                            R.string.printer_disconnected,
+                            Toast.LENGTH_LONG).show()
+                    return@OnPreferenceClickListener false
+                } else if (mBluetoothLeService!!.uartTxCharacteristic == null) {
+                    Log.d(TAG, "Printer connection error")
+                    Toast.makeText(activity,
+                            R.string.printer_connection_error,
+                            Toast.LENGTH_LONG).show()
+                    return@OnPreferenceClickListener false
+                } else {
+                    mBluetoothLeService!!.writeUartData(
+                            mBluetoothLeService!!.uartTxCharacteristic as BluetoothGattCharacteristic,
+                            buildUartPrinterString(testData[0], false, testData[1]))
+//                        buildUartPrinterString(testData[0], false, "H7EFWW3CW9"))
 //                buildUartPrinterString("Klaus-Bärbel Günther von Irgendwas-Doppelname genannt Jemand Anders", false, "1234567890"))
-                buildUartPrinterString("Häns Würst", false, "1234567890"))
-                return@OnPreferenceClickListener true
+//                buildUartPrinterString("Max Mustermann", false, "1234567890"))
+                    return@OnPreferenceClickListener true
+                }
             }
         }
 
