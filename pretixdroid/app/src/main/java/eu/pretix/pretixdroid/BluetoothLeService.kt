@@ -209,6 +209,11 @@ class BluetoothLeService : Service() {
             return false
         }
 
+        if (!BluetoothAdapter.checkBluetoothAddress(address)){
+            Log.e(TAG, "Invalid address: " + address)
+            return false
+        }
+
         // Previously connected device.  Try to reconnect.
         if (mBluetoothDeviceAddress != null && address == mBluetoothDeviceAddress
                 && mBluetoothGatt != null) {
@@ -391,27 +396,27 @@ class BluetoothLeService : Service() {
         private var uart_tx_characteristic: BluetoothGattCharacteristic? = null
         private var uart_rx_characteristic: BluetoothGattCharacteristic? = null
 
-        val String_Silpion_UART = "6E400001-B5A3-F393-E0A9-E50E24DCCA9E"
+        val String_Silpion_UART = "6E400001-B5A3-F393-E0A9-E50E24DCCA9F"
         val ParcelUuid_Silpion_UART = ParcelUuid.fromString(String_Silpion_UART)
 
         // UART TX Characteristic: Android --> nRF (write, write_wo_resp)
-        val String_UART_TX_Char = "6E400002-B5A3-F393-E0A9-E50E24DCCA9E"
+        val String_UART_TX_Char = "6E400002-B5A3-F393-E0A9-E50E24DCCA9F"
         val UUID_UART_TX_Char = UUID.fromString(String_UART_TX_Char)
 
         // UART RX Characteristic: nRF --> Android (notify)
-        val String_UART_RX_Char = "6E400003-B5A3-F393-E0A9-E50E24DCCA9E"
+        val String_UART_RX_Char = "6E400003-B5A3-F393-E0A9-E50E24DCCA9F"
         val UUID_UART_RX_Char = UUID.fromString(String_UART_RX_Char)
 
         // UART Baudrate Characteristic: read, write
-        val String_UART_Baudrate_Char = "6E400004-B5A3-F393-E0A9-E50E24DCCA9E"
+        val String_UART_Baudrate_Char = "6E400004-B5A3-F393-E0A9-E50E24DCCA9F"
         val UUID_UART_Baudrate_Char = UUID.fromString(String_UART_Baudrate_Char)
 
         // UART Hardware Flow Control Characteristic: read, write
-        val String_UART_HWFC_Char = "6E400005-B5A3-F393-E0A9-E50E24DCCA9E"
+        val String_UART_HWFC_Char = "6E400005-B5A3-F393-E0A9-E50E24DCCA9F"
         val UUID_UART_HWFC_Char = UUID.fromString(String_UART_HWFC_Char)
 
         // UART Name Characteristic: read, write
-        val String_UART_Name_Char = "6E400006-B5A3-F393-E0A9-E50E24DCCA9E"
+        val String_UART_Name_Char = "6E400006-B5A3-F393-E0A9-E50E24DCCA9F"
         val UUID_UART_Name_Char = UUID.fromString(String_UART_Name_Char)
 
         // This needs to be based on the generic Attribute UUID, not our Service UUID!
